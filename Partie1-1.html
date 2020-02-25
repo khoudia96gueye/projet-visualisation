@@ -1,0 +1,189 @@
+<html>
+
+<head></head>
+
+<body>
+    <div>
+        <form action="" >
+
+        <div style="width: 30% ;height: 100%; border: 2px; background-color:#6495ed; float: left;">
+            <h1>Panneau de saisie</h1>
+            <div style="margin: 5%;">
+                <h3> Nom de l'emploie</h3>
+                <input type="text" name="nomEmploi" id="nomEmploi">
+            </div>
+            <div style="margin: 5%;">
+                <h3> Catégorie</h3>
+                <select name="categorie" id="categorie">
+                    <option value="Categorie A">Categorie A</option>
+                    <option value="Categorie B">Categorie B</option>
+                    <option value="Categorie C">Categorie C</option>
+                </select>
+            </div>
+            <div style="margin: 5%;">
+                <h3>Nombre d'heure</h3>
+                <input type="number" name="nbreHeure" id="nbreHeure">
+            </div>
+            <h3> A t'il éffectué des heures supplementaire ?</h3>
+            <div style="margin: 5%;">
+                OUI
+                <input type="radio" name="checkHeureSupp" id="checkHeureSuppOui" value="OUI">
+            </div>
+            <div style="margin: 5%;">
+                NON
+                <input type="radio" name="checkHeureSupp" id="checkHeureSuppOui" value="NON">
+            </div>
+            <div style="margin: 5%;">
+                <h3>Heure supplémzntaire</h3>
+                <input type="number" name="heureSupp" id="heureSupp">
+            </div>
+            <div style="margin: 5%;">
+                <h3>Avantages</h3>
+                <input type="number" name="avantages" id="avantages">
+            </div>
+            <div style="margin-left: 10%;">
+                <input type="button" value="Ajouter" name="Ajouter"
+                    style="width: 20%; height: 5%; background-color: greenyellow;" onclick='onFormSubmit()'>
+                <input type="button" value="Annuler" name="Annuler"
+                    style="width: 20%; height: 5%; background-color: red;">
+            </div>
+            
+        </div>
+        <div style="width: 60%; border: 2px; background-color: #D0E3FA; float: right; padding-left: 100px;">
+            <h1>Enregistrement </h1>
+            <table id="table" style="border: medium solid #000000;  width:70%; ">
+                <thead style=" font-family: monospace;
+                border: thin solid #6495ed;
+                width: 50%;
+                padding: 5px;
+                background-color: rgb(1, 106, 235);
+                background-image: url(sky.jpg)">
+                    <th>Nom</th>
+                    <th>Salaire</th>
+                    <th>RAS</th>
+                    <th>Salaire net</th>
+                </thead>
+                <tbody>
+
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    
+                </tbody>
+            </table>
+                       
+        </div>
+    </form>
+     </div>
+<script>
+    function insertData(data) {
+        var table=document.getElementById("table").getElementsByTagName('tbody')[0];
+        var newRow=table.insertRow(table.length);
+        cell1=newRow.insertCell(0);
+        cell1.innerHTML=data.nom;
+        cell2=newRow.insertCell(1);
+        cell2.innerHTML=data.salaire + " cfa";
+        cell3=newRow.insertCell(2);
+        cell3.innerHTML=data.ras + " cfa";
+        cell4=newRow.insertCell(3);
+        cell4.innerHTML=data.net + " cfa";
+
+
+    }
+    function onFormSubmit()
+    {
+        var formData= myFunction();
+        insertData(formData);   
+    }
+    function myFunction() {
+        var elem = {}
+        
+        var heureSupp=document.getElementById("heureSupp").value
+        var tauxh =document.getElementById("nbreHeure").value
+        if (heureSupp=="") {
+            heureSupp=0
+        }
+        if (tauxh=="") {
+            tauxh=0
+        }
+        else{
+            tauxh=parseInt(tauxh)
+        }
+        if(document.getElementById('checkHeureSuppOui').checked==true)
+            tauxh=tauxh+ parseInt(heureSupp)
+        var avantages=document.getElementById("avantages").value
+        if (avantages=="") {
+            avantages=0
+        }
+        else{
+            avantages=parseInt(avantages)
+        }
+        
+        elem['nom']=document.getElementById("nomEmploi").value
+        if (document.getElementById("categorie").value == 'Categorie A') {
+        
+           
+            
+                if (tauxh == 145) {
+                    elem['salaire']=(140 * 10000 )+(5 * 10000 * 0.3)+avantages
+                    elem['ras']=((140 * 10000) +(5 * 10000 * 0.3) + avantages )/ 10
+                    elem['net']=((140 * 10000) + (5 * 10000 * 0.3))/ 10 -( 140 * 10000) +( 5 * 10000 * 0.3) + avantages
+                }
+                if (tauxh > 145) {
+                    elem['salaire']=tauxh * 10000 + (tauxh - 145) * 10000 * 0.45 + avantages
+                    elem['ras']=(140 * 10000 + (tauxh - 145) * 10000 * 0.45) / 10
+                    elem['net']=tauxh * 10000 + (tauxh - 145) * 10000 * 0.45 + avantages- (140 * 10000 + (tauxh - 145) * 10000 * 0.45 + avantages) / 10
+                }
+              
+                else {
+                    elem['salaire']=tauxh * 10000 + avantages
+                    elem['ras']=(tauxh * 10000 + avantages)/ 10
+                    elem['net']=(tauxh * 10000 + avantages) - (tauxh * 10000 + avantages )/ 10
+                }
+        }
+        if (document.getElementById("categorie").value == 'Categorie B') {
+            if (tauxh == 145) {
+                elem['salaire']=140 * 10000 + 5 * 7500 * 0.3 + avantages
+                elem['ras']=(140 * 7500 + 5 * 7500 * 0.3 + avantages) / 10
+                elem['net']=140 * 10000 + 5 * 7500 * 0.3 - 140 * 7500 + 5 * 7500 * 0.3 / 10
+            }
+            if (tauxh > 145) {
+                elem['salaire']=tauxh * 7500 + (tauxh - 145) * 7500 * 0.45 + avantages
+                elem['ras']=(140 * 7500 + (tauxh - 145) * 7500 * 0.45 + avantages) / 10
+                elem['net']=(tauxh * 7500 + (tauxh - 145) * 7500 * 0.45 + avantages )- (140 * 7500 + (tauxh - 145) * 7500 * 0.45 + avantages)/ 10
+            }
+            else {
+                elem['salaire']=tauxh * 7500 + avantages
+                elem['ras']=(tauxh * 7500 + avantages) / 10
+                elem['net']=tauxh * 7500 + avantages - (tauxh * 7500 + avantages) / 10
+            }
+        }
+        if (document.getElementById("categorie").value == 'Categorie C') {
+            if (tauxh == 145) {
+                elem['salaire']=140 * 5000 + 5 * 5000 * 0.3 + avantages
+                elem['ras']=(140 * 5000 + 5 * 5000 * 0.3 + avantages) / 10
+                elem['net']=140 * 5000 + 5 * 5000 * 0.3 + avantages - (140 * 5000 + 5 * 5000 * 0.3 + avantages) / 10
+            }
+            if (tauxh > 145) {
+                elem['salaire']=tauxh * 5000 + (tauxh - 145) * 5000 * 0.45 + avantages
+                elem['ras']=(140 * 5000 + (tauxh - 145) * 5000 * 0.45 + avantages) / 10
+                elem['net']=tauxh * 5000 + (tauxh - 145) * 5000 * 0.45 + avantages - (140 * 5000 + (tauxh - 145) * 5000 * 0.45 + avantages )/ 10
+            }
+            else {
+                elem['salaire']=tauxh * 5000 + avantages
+                elem['ras']=(tauxh * 5000 + avantages) / 10
+                elem['net']=tauxh * 5000 + avantages - (tauxh * 5000 + avantages) / 10
+            }
+        }
+       
+        return elem
+
+
+    }
+                
+                
+                    </script>
+</body>
+
+</html>
